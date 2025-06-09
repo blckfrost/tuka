@@ -4,9 +4,9 @@ services:
     container_name: tuka_db
     restart: always
     ports:
-      - "5433:5433"
+      - "5432:5432"
     environment:
-      POSTGRES_DB: tuka
+      POSTGRES_DB: tuka_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password123
     volumes:
