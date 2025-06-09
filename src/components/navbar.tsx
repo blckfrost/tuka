@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from './ui/button';
 
 export default async function Navbar() {
@@ -16,7 +17,19 @@ export default async function Navbar() {
                         Tuka
                     </Link>
                 </li>
-                <li>{!session ? <Button>Login</Button> : null}</li>
+                <li>
+                    {!session ? (
+                        <Link href="/login">
+                            <Button>Login</Button>
+                        </Link>
+                    ) : (
+                        <div>
+                            <Link href="/profile">
+                                <Image width={30} height={30} src={session.user.image as string} alt={`${session.user.name} image`} className="rounded-full" />
+                            </Link>
+                        </div>
+                    )}
+                </li>
             </ul>
         </nav>
     );
