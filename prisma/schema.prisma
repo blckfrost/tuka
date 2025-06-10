@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-    id            String    @id
+    id            String    @id @default(cuid())
     name          String
     email         String
     emailVerified Boolean
@@ -24,14 +24,16 @@ model User {
     updatedAt     DateTime
     sessions      Session[]
     accounts      Account[]
-    posts         Post[]
+
+    posts    Post[]
+    comments Comment[]
 
     @@unique([email])
     @@map("users")
 }
 
 model Session {
-    id        String   @id
+    id        String   @id @default(cuid())
     expiresAt DateTime
     token     String
     createdAt DateTime
@@ -46,7 +48,7 @@ model Session {
 }
 
 model Account {
-    id                    String    @id
+    id                    String    @id @default(cuid())
     accountId             String
     providerId            String
     userId                String
@@ -65,7 +67,7 @@ model Account {
 }
 
 model Verification {
-    id         String    @id
+    id         String    @id @default(cuid())
     identifier String
     value      String
     expiresAt  DateTime
@@ -76,10 +78,36 @@ model Verification {
 }
 
 model Post {
-    id        Int     @id @default(autoincrement())
-    title     String
-    content   String?
-    published Boolean @default(false)
-    authorId  String
-    author    User    @relation(fields: [authorId], references: [id])
+    id        String   @id @default(cuid())
+    createdAt DateTime
+    updatedAt DateTime @updatedAt
+
+    title      String
+    image      String
+    content    String?
+    visibility Boolean   @default(false)
+    comments   Comment[]
+    likes      Int       @default(0)
+
+    authorId String
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    @@map("posts")
+}
+
+model Comment {
+    id        String   @id @default(cuid())
+    createdAt DateTime
+    updatedAt DateTime @updatedAt
+
+    content String
+    likes   Int    @default(0)
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    authorId String
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    @@map("comments")
 }
