@@ -25,7 +25,7 @@ export default async function Navbar() {
                     ) : (
                         <div>
                             <Link href="/profile">
-                                <Image width={30} height={30} src={session.user.image as string} alt={`${session.user.name} image`} className="rounded-full" />
+                                <Image width={40} height={40} src={session.user.image as string} alt={`${session.user.name} image`} className="rounded-full" />
                             </Link>
                         </div>
                     )}

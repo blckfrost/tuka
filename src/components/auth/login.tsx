@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { SigninAction } from '@/lib/actions/signin';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { signIn } from '@/lib/auth-client';
@@ -16,14 +15,21 @@ export default function SignIn() {
         setLoading(true);
 
         try {
-            const result = await SigninAction();
-            if (result?.error) {
-                toast.error(result.error);
-            } else {
-                toast.success('Welcome.');
-            }
+            await signIn.social(
+                {
+                    provider: 'github',
+                    callbackURL: '/',
+                },
+                {
+                    onSuccess: () => {
+                        toast.success('Welcome');
+                    },
+                    onError: () => {
+                        toast.error('Something went wrong try again');
+                    },
+                },
+            );
         } catch (error) {
-            toast.error('Something went wrong.');
             console.error(error);
         } finally {
             setLoading(false);
@@ -39,17 +45,7 @@ export default function SignIn() {
             <CardContent>
                 <div className="grid gap-4">
                     <div className={cn('w-full gap-2 flex items-center', 'justify-between flex-col')}>
-                        <Button
-                            variant="outline"
-                            className={cn('w-full gap-2')}
-                            disabled={loading}
-                            onClick={async () => {
-                                await signIn.social({
-                                    provider: 'github',
-                                    callbackURL: '/',
-                                });
-                            }}
-                        >
+                        <Button variant="outline" className={cn('w-full gap-2')} disabled={loading} onClick={handleSubmit}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path
                                     fill="currentColor"
