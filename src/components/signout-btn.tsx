@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-export default function SignOutBtn() {
+export default function SignOutButton() {
     const router = useRouter();
     const [pending, setIsPending] = useState(false);
 
