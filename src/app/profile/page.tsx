@@ -11,8 +11,9 @@ export default async function ProfilePage() {
     return (
         <main>
             <section className="flex flex-col items-center gap-2">
-                <Image width={100} height={100} src={session?.user.image as string} alt={`${session?.user.name} image`} className="rounded-md" />
+                <Image width={150} height={150} src={session?.user.image as string} alt={`${session?.user.name} image`} className="rounded-md" />
                 <p>{session?.user.name}</p>
+                <h1 className="text-4xl font-bold brightness-150">Your Dashboard</h1>
                 <SignOutButton />
             </section>
         </main>

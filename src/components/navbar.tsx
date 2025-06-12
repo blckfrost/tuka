@@ -10,7 +10,7 @@ export default async function Navbar() {
     });
 
     return (
-        <nav className="py-6">
+        <nav className="py-4">
             <ul className="flex justify-between items-center">
                 <li>
                     <Link href="/" className="hover:underline flex gap-2 items-center text-xl">
