@@ -25,6 +25,10 @@ export async function CreatePostAction(formData: FormData): Promise<State> {
         headers: await headers(),
     });
 
+    if (!session?.user?.email) {
+        return { message: 'Not authenticated' };
+    }
+
     const validatedFields = FormSchema.safeParse({
         title: formData.get('title'),
         content: formData.get('content')?.toString() || '',
@@ -40,9 +44,10 @@ export async function CreatePostAction(formData: FormData): Promise<State> {
 
     try {
         const user = await prisma.user.findUnique({
-            where: { email: session?.user.email },
+            where: { email: session.user.email },
         });
-        if (!user || user.id) {
+
+        if (!user) {
             return { message: 'User not found.' };
         }
 
@@ -50,7 +55,9 @@ export async function CreatePostAction(formData: FormData): Promise<State> {
             data: {
                 title: validatedFields.data.title,
                 content: validatedFields.data.content || '',
+                image: validatedFields.data.imageUrl,
                 authorId: user.id,
+                createdAt: new Date(),
             },
         });
 
