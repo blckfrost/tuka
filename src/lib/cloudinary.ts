@@ -1,18 +1,9 @@
-export async function uploadToCloudinary(file: File): Promise<string | null> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'glossymoss');
+import { v2 as cloudinary } from 'cloudinary';
 
-    try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`, {
-            method: 'POST',
-            body: formData,
-        });
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-        const data = await res.json();
-        return data.secure_url as string;
-    } catch (error) {
-        console.error('Cloudinary Upload failed.', error);
-        return null;
-    }
-}
+export default cloudinary;
