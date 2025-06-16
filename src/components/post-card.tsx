@@ -1,21 +1,21 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface PostCardProps {
     id: string;
     title: string;
     content: string;
-    imageUrl: string;
+    image: string;
     createdAt: Date;
     authorId: string;
     currentUserId: string;
+    visibity?: string;
 }
 
-export default function PostCard({ id, title, content, imageUrl, createdAt, currentUserId, authorId }: PostCardProps) {
+export default function PostCard({ id, title, content, image, createdAt, currentUserId, authorId, visibity }: PostCardProps) {
     const isAuthor = authorId === currentUserId;
     return (
         <Card className="w-full">
@@ -25,7 +25,7 @@ export default function PostCard({ id, title, content, imageUrl, createdAt, curr
             </CardHeader>
             <CardContent>
                 <div>
-                    <img src={imageUrl} alt={title} className="object-cover rounded-lg w-full h-full" />
+                    <Image src={image} alt={title} className="object-cover rounded-lg" width={300} height={300} />
                 </div>
                 <p className="text-gray-700 line-clamp-3">{content}</p>
             </CardContent>

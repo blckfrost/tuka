@@ -5,15 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PostCard from '@/components/post-card';
 import { getSession } from '@/lib/actions/session';
-
-interface Post {
-    id: string;
-    title: string;
-    content: string;
-    imageUrl: string;
-    createdAt: Date;
-    authorId: string;
-}
+import { Post } from '@/generated/prisma';
 
 export default function Home() {
     const [posts, setPosts] = useState<Post[]>([]);
