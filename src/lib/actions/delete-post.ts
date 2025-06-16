@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { getSession } from './session';
+import { getSession } from '@/lib/session';
 
 export async function DeletePostAction(postId: string) {
     try {
