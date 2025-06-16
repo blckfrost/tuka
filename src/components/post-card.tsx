@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { DeletePostAction } from '@/lib/actions/delete-post';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface PostCardProps {
     id: string;
@@ -17,6 +20,22 @@ interface PostCardProps {
 
 export default function PostCard({ id, title, content, image, createdAt, currentUserId, authorId, visibity }: PostCardProps) {
     const isAuthor = authorId === currentUserId;
+    const router = useRouter();
+
+    async function handleDelete() {
+        try {
+            const result = await DeletePostAction(id);
+            if (result.message === 'Post deleted succesfully') {
+                toast.success('Post deleted succesfully.');
+                router.refresh();
+            } else {
+                toast.error(result.message || 'Failed to delete post');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Something went wrong');
+        }
+    }
     return (
         <Card className="w-full">
             <CardHeader>
@@ -34,7 +53,7 @@ export default function PostCard({ id, title, content, image, createdAt, current
                     <Button>Read More</Button>
                 </Link>
                 {isAuthor && (
-                    <Button variant="destructive">
+                    <Button variant="destructive" onClick={handleDelete}>
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 )}
