@@ -2,7 +2,9 @@
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import PostCard from '@/components/post-card';
+import { getSession } from '@/lib/actions/session';
 
 interface Post {
     id: string;
@@ -15,6 +17,24 @@ interface Post {
 
 export default function Home() {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchPosts() {
+            const response = await fetch('/api/posts');
+            const data = await response.json();
+            setPosts(data);
+        }
+
+        async function getCurrentUser() {
+            // const session = await auth.api.getSession({ headers: await headers() });
+            const session = await getSession();
+            setCurrentUserId(session?.user.id || null);
+        }
+
+        fetchPosts();
+        getCurrentUser();
+    }, []);
 
     return (
         <div className="container mx-auto py-8">
@@ -26,6 +46,11 @@ export default function Home() {
                         Create Post
                     </Button>
                 </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {posts.map((post) => (
+                    <PostCard key={post.id} {...post} currentUserId={currentUserId || ''} />
+                ))}
             </div>
         </div>
     );
