@@ -1,25 +1,38 @@
 import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
+
+        if (!id) {
+            return Response.json({ error: 'Post ID is required' }, { status: 400 });
+        }
+
         const post = await prisma.post.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 author: {
                     select: {
+                        id: true,
                         name: true,
                         image: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        comments: true,
                     },
                 },
             },
         });
 
         if (!post) {
-            return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+            return Response.json({ error: 'Post not found' }, { status: 404 });
         }
+        return Response.json(post);
     } catch (error) {
         console.error('Error fetching post', error);
-        return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
+        return Response.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

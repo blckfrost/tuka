@@ -15,10 +15,9 @@ interface PostCardProps {
     createdAt: Date;
     authorId: string;
     currentUserId: string;
-    visibity?: string;
 }
 
-export default function PostCard({ id, title, content, image, createdAt, currentUserId, authorId, visibity }: PostCardProps) {
+export default function PostCard({ id, title, content, image, createdAt, currentUserId, authorId }: PostCardProps) {
     const isAuthor = authorId === currentUserId;
     const router = useRouter();
 

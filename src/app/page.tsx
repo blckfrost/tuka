@@ -5,7 +5,15 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PostCard from '@/components/post-card';
 import { getSession } from '@/lib/session';
-import { Post } from '@/generated/prisma';
+
+interface Post {
+    id: string;
+    title: string;
+    content: string;
+    image: string;
+    createdAt: Date;
+    authorId: string;
+}
 
 export default function Home() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -19,7 +27,6 @@ export default function Home() {
         }
 
         async function getCurrentUser() {
-            // const session = await auth.api.getSession({ headers: await headers() });
             const session = await getSession();
             setCurrentUserId(session?.user.id || null);
         }
