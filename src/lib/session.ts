@@ -1,5 +1,5 @@
 'use server';
-import { auth } from '../auth';
+import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
 export async function getSession() {
@@ -8,6 +8,16 @@ export async function getSession() {
         return session;
     } catch (error) {
         console.error('Failed to get session', error);
+        return null;
+    }
+}
+
+export async function getUser() {
+    try {
+        const user = await getSession();
+        return user?.user;
+    } catch (error) {
+        console.error('Error getting user', error);
         return null;
     }
 }
