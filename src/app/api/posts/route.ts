@@ -16,6 +16,9 @@ export async function GET() {
                 },
             },
         });
+        if (!posts) {
+            return NextResponse.json({ error: 'Posts not found' }, { status: 404 });
+        }
 
         return NextResponse.json(posts);
     } catch (error) {
