@@ -24,8 +24,8 @@ export default function PostCard({ id, title, content, image, createdAt, current
     async function handleDelete() {
         try {
             const result = await DeletePostAction(id);
-            if (result.message === 'Post deleted succesfully') {
-                toast.success('Post deleted succesfully.');
+            if (result.message === 'Post deleted successfully') {
+                toast.success('Post deleted successfully.');
                 router.refresh();
             } else {
                 toast.error(result.message || 'Failed to delete post');
@@ -35,24 +35,37 @@ export default function PostCard({ id, title, content, image, createdAt, current
             toast.error('Something went wrong');
         }
     }
+
     return (
-        <Card className="w-full">
-            <CardHeader>
-                <h2 className="text-xl font-semibold">{title}</h2>
-                <p className="text-sm text-gray-500">{new Date(createdAt).toLocaleString()}</p>
+        <Card className="w-full max-w-md mx-auto shadow-sm hover:shadow-md transition-shadow duration-200">
+            <CardHeader className="pb-3">
+                <h2 className="text-xl font-semibold text-gray-900 line-clamp-2 leading-tight">{title}</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                    {new Date(createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    })}
+                </p>
             </CardHeader>
-            <CardContent>
-                <div>
-                    <Image src={image} alt={title} className="object-cover rounded-lg" width={300} height={300} />
+
+            <CardContent className="space-y-4">
+                <div className="aspect-video relative overflow-hidden rounded-lg bg-gray-100">
+                    <Image src={image} alt={title} fill className="object-cover transition-transform duration-200 hover:scale-105" />
                 </div>
-                <p className="text-gray-700 line-clamp-3">{content}</p>
+                <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">{content}</p>
             </CardContent>
-            <CardFooter className="flex justify-between">
+
+            <CardFooter className="flex justify-between items-center pt-4">
                 <Link href={`/post/${id}`}>
-                    <Button>Read More</Button>
+                    <Button variant="default" size="sm" className="font-medium">
+                        Read More
+                    </Button>
                 </Link>
                 {isAuthor && (
-                    <Button variant="destructive" onClick={handleDelete}>
+                    <Button variant="outline" size="sm" onClick={handleDelete} className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300">
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 )}
